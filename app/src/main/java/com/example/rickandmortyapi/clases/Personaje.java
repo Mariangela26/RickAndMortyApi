@@ -1,12 +1,11 @@
 package com.example.rickandmortyapi.clases;
 
-import android.location.Location;
 
 import com.example.rickandmortyapi.clases.Origin;
 
 import org.json.JSONArray;
 
-public class Character {
+public class Personaje {
     private  int id;
     private String name;
     private String status;
@@ -14,13 +13,13 @@ public class Character {
     private String type;
     private String gender;
     private Origin origin;
-    private Location location;
+    private com.example.rickandmorty.Clases.Location location;
     private String urlImage;
     private JSONArray episode;
     private String urlCharacter;
     private String created;
 
-    public Character(int id, String name, String status, String species, String type, String gender, Origin origin, Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
+    public Personaje(int id, String name, String status, String species, String type, String gender, Origin origin, com.example.rickandmorty.Clases.Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -91,11 +90,11 @@ public class Character {
         this.origin = origin;
     }
 
-    public Location getLocation() {
+    public com.example.rickandmorty.Clases.Location getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(com.example.rickandmorty.Clases.Location location) {
         this.location = location;
     }
 
