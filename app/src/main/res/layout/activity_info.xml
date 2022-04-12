@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoActivity"
+    android:background="@drawable/fondo"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/txInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:textSize="30dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="INFORMACIÓN " />
+
+    <TextView
+        android:id="@+id/txId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Id: " />
+
+    <TextView
+        android:id="@+id/txName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Nombre: " />
+
+    <TextView
+        android:id="@+id/txStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Estado: " />
+
+    <TextView
+        android:id="@+id/txSpecies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Especie:  " />
+
+    <TextView
+        android:id="@+id/txType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Tipo: " />
+
+    <TextView
+        android:id="@+id/txGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Genero: " />
+
+    <TextView
+        android:id="@+id/txOrigin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Origen: " />
+
+    <TextView
+        android:id="@+id/txLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Ubicacion: " />
+
+    <TextView
+        android:id="@+id/txUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Url: " />
+
+    <TextView
+        android:id="@+id/txCreated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="Fecha Creado: " />
+
+    <ToggleButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="60dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#39B7C8"
+        android:textColor="@color/white"
+        android:textOff="Añadir a Favoritos"
+        android:textOn="Quitar de Favoritos" />
+</androidx.appcompat.widget.LinearLayoutCompat>
