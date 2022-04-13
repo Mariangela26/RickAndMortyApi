@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
 import com.example.rickandmortyapi.clases.ListAdapter;
 import com.example.rickandmortyapi.clases.ListElement;
+import com.example.rickandmortyapi.clases.Personaje;
 import com.example.rickandmortyapi.clases.Utils;
 
 import java.util.ArrayList;
@@ -21,12 +22,17 @@ public class FavoriteActivity extends AppCompatActivity {
 
     List<ListElement> elementsFav;
     ConexionSqliteHelper conn;
+    RecyclerView recyclerViewPersonaje;
+    Personaje personaje;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        conn = new ConexionSqliteHelper(getApplicationContext(), "db_personajes", null,1);
+        recyclerViewPersonaje = findViewById(R.id.listRecyclerView);
+        recyclerViewPersonaje.setLayoutManager(new LinearLayoutManager(this));
+
+        conn = new ConexionSqliteHelper(getApplicationContext(), "db_favoritos", null,1);
         listarCards();
     }
 
@@ -36,28 +42,31 @@ public class FavoriteActivity extends AppCompatActivity {
 
         SQLiteDatabase db = conn.getReadableDatabase();
         String[] fields = {Utils.CAMPO_NAME, Utils.CAMPO_SPECIES, Utils.CAMPO_STATUS, Utils.CAMPO_GENDER};
-        Cursor cursor = db.query(Utils.TABLE_PERSONAJES, fields, null, null,null,null,null);
+        //Cursor cursor = db.query(Utils.TABLE_PERSONAJES, fields, null, null,null,null,null);
 
-        for(int i=0; i<3; i++){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_PERSONAJES/*+" WHERE "+ Utils.CAMPO_NAME+"="+name*/, null);
 
-            try {
-                cursor.move(i);
+        try {
+            while (cursor.moveToNext()){
+                personaje=new Personaje();
+                personaje.setId(cursor.getInt(0));
+                personaje.setName(cursor.getString(1));
+                personaje.setStatus(cursor.getString(2));
+                personaje.setSpecies(cursor.getString(3));
+                personaje.setType(cursor.getString(4));
+                personaje.setGender(cursor.getString(5));
+                personaje.setUrlImage(cursor.getString(6));
+                personaje.setUrlCharacter(cursor.getString(7));
+                personaje.setCreated(cursor.getString(8));
 
-                name = cursor.getString(0);
-                species = cursor.getString(1);
-                status = cursor.getString(2);
-                gender = cursor.getString(3);
-                elementsFav.add(new ListElement(name, species, status, gender));
-                System.out.println("LISTA fav: "+elementsFav.get(i).name+", "+elementsFav.get(i).status);
+                elementsFav.add(new ListElement(personaje.getName(), personaje.getSpecies(), personaje.getStatus(), personaje.getGender()));
 
-                cursor.close();
-
-            }catch (Exception e){
-                Toast.makeText(getApplicationContext(), "no existen favritos.", Toast.LENGTH_LONG).show();
             }
-
-
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "no existen favritos.", Toast.LENGTH_LONG).show();
         }
+
+
         try {
             ListAdapter listAdapter = new ListAdapter(elementsFav, this);
             RecyclerView recyclerView = findViewById(R.id.listRecyclerView);

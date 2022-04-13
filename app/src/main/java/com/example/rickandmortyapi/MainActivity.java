@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 values.put(Utils.CAMPO_URL_CHARACTER,jsnPersonaje.getString("url"));
                 values.put(Utils.CAMPO_CREATED,jsnPersonaje.getString("created"));
 
+                Long result = db.insert(Utils.TABLE_PERSONAJES, Utils.CAMPO_ID, values);
+
                 db.close();
 
                 name = personaje.getName();
@@ -136,36 +138,20 @@ public class MainActivity extends AppCompatActivity {
                 elements.add(new ListElement(name, species, status, gender));
                 System.out.println("LISTA: "+elements.get(i).name+", "+elements.get(i).status);
 
-
-/*
-                bundInfo.putString("id", personaje.toString());
-                bundInfo.putString("name", personaje.getName());
-                bundInfo.putString("status", personaje.getStatus());
-                bundInfo.putString("species", personaje.getSpecies());
-                bundInfo.putString("type", personaje.getType());
-                bundInfo.putString("gender", personaje.getGender());
-                bundInfo.putString("originName", personaje.getOrigin().getName());
-                bundInfo.putString("originUrl", personaje.getOrigin().getUrl());
-                bundInfo.putString("location", personaje.getLocation().getName());
-                bundInfo.putString("location", personaje.getLocation().getUrl());
-                bundInfo.putString("url", personaje.getUrlCharacter());
-                bundInfo.putString("created", personaje.getCreated());
-*/
             }
             ListAdapter listAdapter = new ListAdapter(elements, this);
-
-
 
             RecyclerView recyclerView = findViewById(R.id.listRecyclerView);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(listAdapter);
 
-            listAdapter.setOnclickListener(new View.OnClickListener() {
+            listAdapter.setOnclickListener(new  View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     selection = elements.get(recyclerView.getChildAdapterPosition(view)).getName();
                     bundInfo.putString("name", selection);
+                    System.out.println("esta es la seleccion "+selection );
                 }
             });
 

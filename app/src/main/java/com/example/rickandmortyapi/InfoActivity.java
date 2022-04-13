@@ -23,7 +23,6 @@ public class InfoActivity extends AppCompatActivity {
     private String id, name, status, species, type, gender, origin, location, url, created;
 
     ArrayList<Personaje> listPersonaje;
-    //RecyclerView recyclerViewPersonaje;
     ConexionSqliteHelper conn ;
     Personaje personaje = null;
 
@@ -34,8 +33,6 @@ public class InfoActivity extends AppCompatActivity {
 
         conn = new ConexionSqliteHelper(getApplicationContext(), "db_Personajes", null, 1);
         listPersonaje = new ArrayList<>();
-        //recyclerViewPersonaje = findViewById(R.id.listRecyclerView);
-        //recyclerViewPersonaje.setLayoutManager(new LinearLayoutManager(this));
 
         Bundle bundInfoReceived = this.getIntent().getExtras();
 
@@ -51,48 +48,52 @@ public class InfoActivity extends AppCompatActivity {
         txCreated = findViewById(R.id.txCreated);
 
         name = bundInfoReceived.getString("name");
+        System.out.println("este es el nombre: "+name);
 
-        findByName(name);
 
-        showInfo();
+        showInfo(findByName(name));
 
     }
 
-    public void findByName(String name){
+    public Personaje findByName(String name){
 
         SQLiteDatabase db = conn.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_PERSONAJES/*+" WHERE "+ Utils.CAMPO_NAME+"="+name*/, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_PERSONAJES+" WHERE "
+                        + Utils.CAMPO_NAME+"=\"Morty Smith\"", null);
 
-        while (cursor.moveToNext()){
-            personaje=new Personaje();
-            personaje.setId(cursor.getInt(0));
-            personaje.setName(cursor.getString(1));
-            personaje.setStatus(cursor.getString(2));
-            personaje.setSpecies(cursor.getString(3));
-            personaje.setType(cursor.getString(4));
-            personaje.setGender(cursor.getString(5));
-            personaje.setUrlImage(cursor.getString(6));
-            personaje.setUrlCharacter(cursor.getString(7));
-            personaje.setCreated(cursor.getString(8));
+        if(cursor.moveToFirst()){
+            do{
+                personaje=new Personaje();
+                personaje.setId(cursor.getInt(0));
+                personaje.setName(cursor.getString(1));
+                personaje.setStatus(cursor.getString(2));
+                personaje.setSpecies(cursor.getString(3));
+                personaje.setType(cursor.getString(4));
+                personaje.setGender(cursor.getString(5));
+                personaje.setUrlImage(cursor.getString(6));
+                personaje.setUrlCharacter(cursor.getString(7));
+                personaje.setCreated(cursor.getString(8));
 
-            listPersonaje.add(personaje);
-
+                listPersonaje.add(personaje);
+            }while (cursor.moveToNext());
         }
+            return personaje;
+
     }
 
-    private void showInfo() {
+    private void showInfo(Personaje per) {
 
-        txId.setText(txId.getText().toString()+personaje.getId());
-        txName.setText(txName.getText()+personaje.getName());
-        txStatus.setText(txStatus.getText()+personaje.getStatus());
-        txSpecies.setText(txSpecies.getText()+personaje.getSpecies());
-        txType.setText(txType.getText()+personaje.getType());
-        txGender.setText(txGender.getText()+personaje.getGender());
-        txOrigin.setText(txOrigin.getText()+personaje.getOrigin().getName());
-        txLocation.setText(txLocation.getText()+personaje.getLocation().getName());
-        txUrl.setText(txUrl.getText()+personaje.getUrlCharacter());
-        txCreated.setText(txCreated.getText()+personaje.getCreated());
+        txId.setText(txId.getText().toString()+per.getId());
+        txName.setText(txName.getText()+per.getName());
+        txStatus.setText(txStatus.getText()+per.getStatus());
+        txSpecies.setText(txSpecies.getText()+per.getSpecies());
+        txType.setText(txType.getText()+per.getType());
+        txGender.setText(txGender.getText()+per.getGender());
+        //txOrigin.setText(txOrigin.getText()+per.getOrigin().getName());
+        //txLocation.setText(txLocation.getText()+per.getLocation().getName());
+        txUrl.setText(txUrl.getText()+per.getUrlCharacter());
+        txCreated.setText(txCreated.getText()+per.getCreated());
 
     }
 

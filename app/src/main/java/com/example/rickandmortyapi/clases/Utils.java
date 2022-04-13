@@ -13,8 +13,8 @@ public class Utils {
     public static final String CAMPO_URL_CHARACTER = "urlCharacter";
     public static final String CAMPO_CREATED = "created";
 
-    public static final String CREAR_TABLA_PERSONAJE = "CREATE TABLE "+TABLE_PERSONAJES+"("+CAMPO_ID+" INTEGER, "+CAMPO_NAME+" TEXT, "+CAMPO_STATUS+
-            " TEXT, "+CAMPO_SPECIES+" TEXT, "+CAMPO_TYPE+" TEXT, "+CAMPO_GENDER+" TEXT, " + CAMPO_URL_IMAGE+
+    public static final String CREAR_TABLA_PERSONAJE = "CREATE TABLE "+TABLE_PERSONAJES+"("+CAMPO_ID+" INTEGER, "+CAMPO_NAME+" TEXT, "
+            +CAMPO_STATUS+ " TEXT, "+CAMPO_SPECIES+" TEXT, "+CAMPO_TYPE+" TEXT, "+CAMPO_GENDER+" TEXT, " + CAMPO_URL_IMAGE+
             " TEXT, "+CAMPO_URL_CHARACTER+" TEXT, "+CAMPO_CREATED+" TEXT)";
 
 }
