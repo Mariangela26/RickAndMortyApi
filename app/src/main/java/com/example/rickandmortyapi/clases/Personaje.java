@@ -19,6 +19,9 @@ public class Personaje {
     private String urlCharacter;
     private String created;
 
+    public Personaje() {
+    }
+
     public Personaje(int id, String name, String status, String species, String type, String gender, Origin origin, com.example.rickandmorty.Clases.Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
         this.id = id;
         this.name = name;

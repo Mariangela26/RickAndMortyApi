@@ -6,12 +6,21 @@ public class ListElement {
     public String species;
     public String status;
     public String gender;
+    public String image;
 
     public ListElement(String name, String species, String status, String gender) {
         this.name = name;
         this.species = species;
         this.status = status;
         this.gender = gender;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {

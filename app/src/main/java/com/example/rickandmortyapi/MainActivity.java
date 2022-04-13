@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     // String urlApi = "https://rickandmortyapi.com/api/character?page=1";
     private Button btnFavoritos;
     List<ListElement> elements;
+    String selection;
     Bundle bundInfo = new Bundle();
 
     @Override
@@ -88,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             JSONArray arrayPersonajes = response.getJSONArray("results");
 
-            elements = new ArrayList<ListElement>();
-            String name, species, status, gender;
+            elements = new ArrayList<>();
+            String name, species, status, gender, image;
 
             for(int i = 0; i<arrayPersonajes.length(); i++){
                 JSONObject jsnPersonaje = arrayPersonajes.getJSONObject(i);
@@ -131,11 +132,12 @@ public class MainActivity extends AppCompatActivity {
                 species = personaje.getSpecies();
                 status = personaje.getStatus();
                 gender = personaje.getGender();
+                image = personaje.getUrlImage();
                 elements.add(new ListElement(name, species, status, gender));
                 System.out.println("LISTA: "+elements.get(i).name+", "+elements.get(i).status);
 
 
-
+/*
                 bundInfo.putString("id", personaje.toString());
                 bundInfo.putString("name", personaje.getName());
                 bundInfo.putString("status", personaje.getStatus());
@@ -148,13 +150,24 @@ public class MainActivity extends AppCompatActivity {
                 bundInfo.putString("location", personaje.getLocation().getUrl());
                 bundInfo.putString("url", personaje.getUrlCharacter());
                 bundInfo.putString("created", personaje.getCreated());
-
+*/
             }
             ListAdapter listAdapter = new ListAdapter(elements, this);
+
+
+
             RecyclerView recyclerView = findViewById(R.id.listRecyclerView);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(listAdapter);
+
+            listAdapter.setOnclickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selection = elements.get(recyclerView.getChildAdapterPosition(view)).getName();
+                    bundInfo.putString("name", selection);
+                }
+            });
 
         }catch (JSONException e){
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

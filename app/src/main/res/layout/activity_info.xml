@@ -128,5 +128,6 @@
         android:backgroundTint="#39B7C8"
         android:textColor="@color/white"
         android:textOff="Añadir a Favoritos"
-        android:textOn="Quitar de Favoritos" />
+        android:textOn="Quitar de Favoritos"
+        android:onClick="onClick"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
