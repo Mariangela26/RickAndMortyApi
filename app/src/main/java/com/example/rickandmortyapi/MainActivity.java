@@ -1,9 +1,5 @@
 package com.example.rickandmortyapi;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,15 +8,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.rickandmortyapi.clases.CharacterC;
 import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
 import com.example.rickandmortyapi.clases.ListAdapter;
 import com.example.rickandmortyapi.clases.ListElement;
 import com.example.rickandmortyapi.clases.Origin;
-import com.example.rickandmortyapi.clases.CharacterC;
 import com.example.rickandmortyapi.clases.Utils;
 
 import org.json.JSONArray;
@@ -33,7 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     String urlApi = "https://rickandmortyapi.com/api/character";
-    // String urlApi = "https://rickandmortyapi.com/api/character?page=1";
+    // String urlApi = "https://rickandmortyapi.com/api/character?page=1"; //si se quiere buscar una pagina en especifico
     private Button btnFavoritos;
     List<ListElement> elements;
     String selection;
@@ -44,11 +44,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ConexionSqliteHelper conn = new ConexionSqliteHelper(this, "db_Personajes", null, 1);
-
         btnFavoritos = findViewById(R.id.btnFavoritos);
 
-        cargarDatosApi();
+        loadDataApi();
 
         btnFavoritos.setOnClickListener(this::onClick);
     }
@@ -68,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Hace la peticion a la api
-    // TODO: guardar los datos en la bd
-    private void cargarDatosApi() {
+    //guarda los datos en la bd
+    private void loadDataApi() {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlApi, null, response -> parserJson(response), error -> Toast.makeText(getApplicationContext(), "Error de conexión", Toast.LENGTH_SHORT).show());
@@ -80,41 +78,40 @@ public class MainActivity extends AppCompatActivity {
     private void parserJson(JSONObject response) {
         CharacterC characterC;
         Origin origin;
-        com.example.rickandmorty.Clases.Location location;
-        JSONArray episodio;
+        com.example.rickandmortyapi.clases.Location location;
+        JSONArray episode;
 
         try {
-            JSONArray arrayPersonajes = response.getJSONArray("results");
+            JSONArray arrayCharacter = response.getJSONArray("results");
 
             elements = new ArrayList<>();
             String name, species, status, gender, image;
 
-            for(int i = 0; i<arrayPersonajes.length(); i++){
-                JSONObject jsnPersonaje = arrayPersonajes.getJSONObject(i);
-                origin = new Origin(jsnPersonaje.getJSONObject("origin").getString("name"),
-                        jsnPersonaje.getJSONObject("origin").getString("url"));
-                location = new com.example.rickandmorty.Clases.Location(jsnPersonaje.getJSONObject("location").getString("name"),
-                        jsnPersonaje.getJSONObject("origin").getString("url"));
-                episodio=jsnPersonaje.getJSONArray("episode");
-                characterC = new CharacterC(jsnPersonaje.getInt("id"),
-                        jsnPersonaje.getString("name"),
-                        jsnPersonaje.getString("status"),
-                        jsnPersonaje.getString("species"),
-                        jsnPersonaje.getString("type"),
-                        jsnPersonaje.getString("gender"),
+            for(int i = 0; i<arrayCharacter.length(); i++){
+                JSONObject jsnCharacter = arrayCharacter.getJSONObject(i);
+                origin = new Origin(jsnCharacter.getJSONObject("origin").getString("name"),
+                        jsnCharacter.getJSONObject("origin").getString("url"));
+                location = new com.example.rickandmortyapi.clases.Location(jsnCharacter.getJSONObject("location").getString("name"),
+                        jsnCharacter.getJSONObject("origin").getString("url"));
+                episode=jsnCharacter.getJSONArray("episode");
+                characterC = new CharacterC(jsnCharacter.getInt("id"),
+                        jsnCharacter.getString("name"),
+                        jsnCharacter.getString("status"),
+                        jsnCharacter.getString("species"),
+                        jsnCharacter.getString("type"),
+                        jsnCharacter.getString("gender"),
                         origin,location,
-                        jsnPersonaje.getString("image"),
-                        episodio,
-                        jsnPersonaje.getString("url"),
-                        jsnPersonaje.getString("created"));
+                        jsnCharacter.getString("image"),
+                        episode,
+                        jsnCharacter.getString("url"),
+                        jsnCharacter.getString("created"));
 
-               saveDB(jsnPersonaje);
+               saveDB(jsnCharacter);
 
                 name = characterC.getName();
                 species = characterC.getSpecies();
                 status = characterC.getStatus();
                 gender = characterC.getGender();
-                image = characterC.getUrlImage();
                 elements.add(new ListElement(name, species, status, gender));
 
             }

@@ -1,4 +1,4 @@
-package com.example.rickandmorty.Clases;
+package com.example.rickandmortyapi.clases;
 
 public class Location {
 

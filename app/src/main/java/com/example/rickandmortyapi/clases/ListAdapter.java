@@ -7,14 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.example.rickandmortyapi.R;
 
 import java.util.List;
@@ -69,7 +65,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, species, status, gender;
-        Bitmap urlImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,7 +76,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         }
 
         void binData(final ListElement item){
-            //setImage(item.getImage());
             name.setText(item.getName());
             species.setText(item.getSpecies());
             status.setText(item.getStatus());

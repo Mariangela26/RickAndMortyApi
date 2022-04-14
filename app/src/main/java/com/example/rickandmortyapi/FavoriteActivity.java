@@ -1,18 +1,21 @@
 package com.example.rickandmortyapi;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.widget.Toast;
-
+import com.example.rickandmortyapi.clases.CharacterC;
 import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
 import com.example.rickandmortyapi.clases.ListAdapter;
 import com.example.rickandmortyapi.clases.ListElement;
-import com.example.rickandmortyapi.clases.CharacterC;
 import com.example.rickandmortyapi.clases.Utils;
 
 import java.util.ArrayList;
@@ -24,6 +27,9 @@ public class FavoriteActivity extends AppCompatActivity {
     ConexionSqliteHelper conn;
     RecyclerView recyclerViewCharacter;
     CharacterC characterC;
+
+    String selectionFav;
+    Bundle bundInfoFav = new Bundle();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +43,8 @@ public class FavoriteActivity extends AppCompatActivity {
 
     private void listCards() {
         elementsFav = new ArrayList<>();
-        String name, species, status, gender;
 
         SQLiteDatabase db = conn.getReadableDatabase();
-        String[] fields = {Utils.FIELD_NAME, Utils.FIELD_SPECIES, Utils.FIELD_STATUS, Utils.FIELD_GENDER};
-        //Cursor cursor = db.query(Utils.TABLE_PERSONAJES, fields, null, null,null,null,null);
 
         Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_CHARACTER+" WHERE "+ Utils.FIELD_FAVORITE+"=1", null);
 
@@ -61,7 +64,6 @@ public class FavoriteActivity extends AppCompatActivity {
 
                     elementsFav.add(new ListElement(characterC.getName(), characterC.getSpecies(), characterC.getStatus(), characterC.getGender()));
 
-                    System.out.printf("esta es la lista: "+elementsFav.get(0));
                 }
                 while (cursor.moveToNext());
             }
@@ -78,6 +80,19 @@ public class FavoriteActivity extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(listAdapter);
+
+            listAdapter.setOnclickListener(new  View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectionFav = elementsFav.get(recyclerView.getChildAdapterPosition(view)).getName();
+                    bundInfoFav.putString("name", selectionFav);
+
+                    Intent intent2 = new Intent(FavoriteActivity.this, InfoActivity.class);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent2.putExtras(bundInfoFav);
+                    startActivity(intent2);
+                }
+            });
         }catch (Exception e){
             Toast.makeText(getApplicationContext(), "No existen favoritos", Toast.LENGTH_LONG).show();
         }

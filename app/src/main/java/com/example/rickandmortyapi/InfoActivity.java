@@ -1,29 +1,29 @@
 package com.example.rickandmortyapi;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.rickandmortyapi.clases.CharacterC;
+import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
 import com.example.rickandmortyapi.clases.Utils;
 
 import java.util.ArrayList;
 
 public class InfoActivity extends AppCompatActivity {
 
-    private TextView txId, txName, txStatus, txSpecies, txType, txGender, txOrigin, txLocation, txUrl, txCreated;
-    private String id, name, status, species, type, gender, origin, location, url, created;
+    private TextView txId, txName, txStatus, txSpecies, txType, txGender, txUrl, txCreated;
+    private String name;
     private Button btnAdd, btnDelete;
 
-    RecyclerView recyclerViewPersonaje;
     ArrayList<CharacterC> listCharacterC;
     ConexionSqliteHelper conn ;
     CharacterC characterC = null;
@@ -46,8 +46,6 @@ public class InfoActivity extends AppCompatActivity {
         txSpecies = findViewById(R.id.txSpecies);
         txType = findViewById(R.id.txType);
         txGender = findViewById(R.id.txGender);
-        txOrigin = findViewById(R.id.txOrigin);
-        txLocation = findViewById(R.id.txLocation);
         txUrl = findViewById(R.id.txUrl);
         txCreated = findViewById(R.id.txCreated);
 
@@ -78,8 +76,6 @@ public class InfoActivity extends AppCompatActivity {
                 characterC.setCreated(cursor.getString(8));
                 characterC.setFavorite(cursor.getInt(9));
 
-                System.out.println("favorito cursor: "+cursor.getInt(9));
-
                 listCharacterC.add(characterC);
             }while (cursor.moveToNext());
         }
@@ -95,12 +91,8 @@ public class InfoActivity extends AppCompatActivity {
         txSpecies.setText(txSpecies.getText()+characterC.getSpecies());
         txType.setText(txType.getText()+characterC.getType());
         txGender.setText(txGender.getText()+characterC.getGender());
-        //txOrigin.setText(txOrigin.getText()+characterC.getOrigin().getName());
-        //txLocation.setText(txLocation.getText()+characterC.getLocation().getName());
         txUrl.setText(txUrl.getText()+characterC.getUrlCharacter());
         txCreated.setText(txCreated.getText()+characterC.getCreated());
-
-        System.out.println("favorito: "+characterC.getFavorite());
 
         if(characterC.getFavorite()==0){
             btnAdd.setEnabled(true);
@@ -116,7 +108,6 @@ public class InfoActivity extends AppCompatActivity {
         SQLiteDatabase db = conn.getWritableDatabase();
 
         String id = txId.getText().toString().split(":")[1];
-        System.out.println("este es el id: "+ id);
         String[] parameter = {id};
         ContentValues values = new ContentValues();
         if(view.getId()==R.id.btnAdd){

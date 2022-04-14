@@ -1,8 +1,6 @@
 package com.example.rickandmortyapi.clases;
 
 
-import com.example.rickandmorty.Clases.Location;
-
 import org.json.JSONArray;
 
 public class CharacterC {
@@ -13,7 +11,7 @@ public class CharacterC {
     private String type;
     private String gender;
     private Origin origin;
-    private com.example.rickandmorty.Clases.Location location;
+    private com.example.rickandmortyapi.clases.Location location;
     private String urlImage;
     private JSONArray episode;
     private String urlCharacter;
@@ -24,7 +22,7 @@ public class CharacterC {
     }
 
     public CharacterC(int id, String name, String status, String species, String type, String gender, Origin origin,
-                      com.example.rickandmorty.Clases.Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
+                      com.example.rickandmortyapi.clases.Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -39,7 +37,7 @@ public class CharacterC {
         this.created = created;
     }
 
-    public CharacterC(int id, String name, String status, String species, String type, String gender, Origin origin, com.example.rickandmorty.Clases.Location location,
+    public CharacterC(int id, String name, String status, String species, String type, String gender, Origin origin, com.example.rickandmortyapi.clases.Location location,
                       String urlImage, JSONArray episode, String urlCharacter, String created, int favorite) {
         this.id = id;
         this.name = name;
@@ -120,11 +118,11 @@ public class CharacterC {
         this.origin = origin;
     }
 
-    public com.example.rickandmorty.Clases.Location getLocation() {
+    public com.example.rickandmortyapi.clases.Location getLocation() {
         return location;
     }
 
-    public void setLocation(com.example.rickandmorty.Clases.Location location) {
+    public void setLocation(com.example.rickandmortyapi.clases.Location location) {
         this.location = location;
     }
 
