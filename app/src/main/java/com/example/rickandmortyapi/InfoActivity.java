@@ -1,7 +1,6 @@
 package com.example.rickandmortyapi;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
@@ -9,10 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
-import com.example.rickandmortyapi.clases.Personaje;
+import com.example.rickandmortyapi.clases.CharacterC;
 import com.example.rickandmortyapi.clases.Utils;
 
 import java.util.ArrayList;
@@ -21,19 +21,23 @@ public class InfoActivity extends AppCompatActivity {
 
     private TextView txId, txName, txStatus, txSpecies, txType, txGender, txOrigin, txLocation, txUrl, txCreated;
     private String id, name, status, species, type, gender, origin, location, url, created;
+    private Button btnAdd, btnDelete;
 
-    ArrayList<Personaje> listPersonaje;
+    RecyclerView recyclerViewPersonaje;
+    ArrayList<CharacterC> listCharacterC;
     ConexionSqliteHelper conn ;
-    Personaje personaje = null;
+    CharacterC characterC = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        conn = new ConexionSqliteHelper(getApplicationContext(), "db_Personajes", null, 1);
-        listPersonaje = new ArrayList<>();
+        conn = new ConexionSqliteHelper(getApplicationContext(), "db_character", null, 1);
+        listCharacterC = new ArrayList<>();
 
+        btnAdd = findViewById(R.id.btnAdd);
+        btnDelete = findViewById(R.id.btnDelete);
         Bundle bundInfoReceived = this.getIntent().getExtras();
 
         txId = findViewById(R.id.txId);
@@ -48,69 +52,87 @@ public class InfoActivity extends AppCompatActivity {
         txCreated = findViewById(R.id.txCreated);
 
         name = bundInfoReceived.getString("name");
-        System.out.println("este es el nombre: "+name);
-
 
         showInfo(findByName(name));
 
     }
 
-    public Personaje findByName(String name){
+    public CharacterC findByName(String name){
 
         SQLiteDatabase db = conn.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_PERSONAJES+" WHERE "
-                        + Utils.CAMPO_NAME+"=\"Morty Smith\"", null);
+        name +="\"";
+        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_CHARACTER +" WHERE "
+                + Utils.FIELD_NAME +"=\""+name, null);
 
         if(cursor.moveToFirst()){
             do{
-                personaje=new Personaje();
-                personaje.setId(cursor.getInt(0));
-                personaje.setName(cursor.getString(1));
-                personaje.setStatus(cursor.getString(2));
-                personaje.setSpecies(cursor.getString(3));
-                personaje.setType(cursor.getString(4));
-                personaje.setGender(cursor.getString(5));
-                personaje.setUrlImage(cursor.getString(6));
-                personaje.setUrlCharacter(cursor.getString(7));
-                personaje.setCreated(cursor.getString(8));
+                characterC =new CharacterC();
+                characterC.setId(cursor.getInt(0));
+                characterC.setName(cursor.getString(1));
+                characterC.setStatus(cursor.getString(2));
+                characterC.setSpecies(cursor.getString(3));
+                characterC.setType(cursor.getString(4));
+                characterC.setGender(cursor.getString(5));
+                characterC.setUrlImage(cursor.getString(6));
+                characterC.setUrlCharacter(cursor.getString(7));
+                characterC.setCreated(cursor.getString(8));
+                characterC.setFavorite(cursor.getInt(9));
 
-                listPersonaje.add(personaje);
+                System.out.println("favorito cursor: "+cursor.getInt(9));
+
+                listCharacterC.add(characterC);
             }while (cursor.moveToNext());
         }
-            return personaje;
+            return characterC;
 
     }
 
-    private void showInfo(Personaje per) {
+    private void showInfo(CharacterC characterC) {
 
-        txId.setText(txId.getText().toString()+per.getId());
-        txName.setText(txName.getText()+per.getName());
-        txStatus.setText(txStatus.getText()+per.getStatus());
-        txSpecies.setText(txSpecies.getText()+per.getSpecies());
-        txType.setText(txType.getText()+per.getType());
-        txGender.setText(txGender.getText()+per.getGender());
-        //txOrigin.setText(txOrigin.getText()+per.getOrigin().getName());
-        //txLocation.setText(txLocation.getText()+per.getLocation().getName());
-        txUrl.setText(txUrl.getText()+per.getUrlCharacter());
-        txCreated.setText(txCreated.getText()+per.getCreated());
+        txId.setText(txId.getText().toString()+characterC.getId());
+        txName.setText(txName.getText()+characterC.getName());
+        txStatus.setText(txStatus.getText()+characterC.getStatus());
+        txSpecies.setText(txSpecies.getText()+characterC.getSpecies());
+        txType.setText(txType.getText()+characterC.getType());
+        txGender.setText(txGender.getText()+characterC.getGender());
+        //txOrigin.setText(txOrigin.getText()+characterC.getOrigin().getName());
+        //txLocation.setText(txLocation.getText()+characterC.getLocation().getName());
+        txUrl.setText(txUrl.getText()+characterC.getUrlCharacter());
+        txCreated.setText(txCreated.getText()+characterC.getCreated());
+
+        System.out.println("favorito: "+characterC.getFavorite());
+
+        if(characterC.getFavorite()==0){
+            btnAdd.setEnabled(true);
+        }else{
+            btnDelete.setEnabled(true);
+        }
 
     }
 
     public void onClick(View view) {
-        ConexionSqliteHelper conn = new ConexionSqliteHelper(this, "db_Fav", null, 1);
+
+        ConexionSqliteHelper conn = new ConexionSqliteHelper(this, "db_character", null, 1);
         SQLiteDatabase db = conn.getWritableDatabase();
 
+        String id = txId.getText().toString().split(":")[1];
+        System.out.println("este es el id: "+ id);
+        String[] parameter = {id};
         ContentValues values = new ContentValues();
-        values.put(Utils.CAMPO_ID,txId.getText().toString());
-        values.put(Utils.CAMPO_NAME,txName.getText().toString());
-        values.put(Utils.CAMPO_STATUS,txStatus.getText().toString());
-        values.put(Utils.CAMPO_SPECIES,txSpecies.getText().toString());
-        values.put(Utils.CAMPO_TYPE,txType.getText().toString());
-        values.put(Utils.CAMPO_GENDER,txGender.getText().toString());
-        values.put(Utils.CAMPO_URL_IMAGE,txUrl.getText().toString());
-        values.put(Utils.CAMPO_URL_CHARACTER,txUrl.getText().toString());
-        values.put(Utils.CAMPO_CREATED,txCreated.getText().toString());
+        if(view.getId()==R.id.btnAdd){
+            values.put(Utils.FIELD_FAVORITE, 1);
+            btnDelete.setEnabled(true);
+            btnAdd.setEnabled(false);
+        }else{
+            values.put(Utils.FIELD_FAVORITE, 0);
+            btnDelete.setEnabled(false);
+            btnAdd.setEnabled(true);
+        }
+
+
+        db.update(Utils.TABLE_CHARACTER,values, Utils.FIELD_ID+"=?", parameter);
+
+
 
         db.close();
     }

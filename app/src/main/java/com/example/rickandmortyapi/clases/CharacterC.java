@@ -1,11 +1,11 @@
 package com.example.rickandmortyapi.clases;
 
 
-import com.example.rickandmortyapi.clases.Origin;
+import com.example.rickandmorty.Clases.Location;
 
 import org.json.JSONArray;
 
-public class Personaje {
+public class CharacterC {
     private  int id;
     private String name;
     private String status;
@@ -18,11 +18,13 @@ public class Personaje {
     private JSONArray episode;
     private String urlCharacter;
     private String created;
+    private int favorite;
 
-    public Personaje() {
+    public CharacterC() {
     }
 
-    public Personaje(int id, String name, String status, String species, String type, String gender, Origin origin, com.example.rickandmorty.Clases.Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
+    public CharacterC(int id, String name, String status, String species, String type, String gender, Origin origin,
+                      com.example.rickandmorty.Clases.Location location, String urlImage, JSONArray episode, String urlCharacter, String created) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -35,6 +37,31 @@ public class Personaje {
         this.episode = episode;
         this.urlCharacter = urlCharacter;
         this.created = created;
+    }
+
+    public CharacterC(int id, String name, String status, String species, String type, String gender, Origin origin, com.example.rickandmorty.Clases.Location location,
+                      String urlImage, JSONArray episode, String urlCharacter, String created, int favorite) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.species = species;
+        this.type = type;
+        this.gender = gender;
+        this.origin = origin;
+        this.location = location;
+        this.urlImage = urlImage;
+        this.episode = episode;
+        this.urlCharacter = urlCharacter;
+        this.created = created;
+        this.favorite = favorite;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
     }
 
     public int getId() {

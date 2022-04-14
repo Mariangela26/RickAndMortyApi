@@ -15,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        android:onClick="onClick">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/linearCard"
@@ -45,7 +44,8 @@
                 android:layout_toEndOf="@id/iconImage"
                 android:orientation="vertical"
                 android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@id/iconImage">
+                android:layout_toRightOf="@id/iconImage"
+                >
 
 
                 <TextView

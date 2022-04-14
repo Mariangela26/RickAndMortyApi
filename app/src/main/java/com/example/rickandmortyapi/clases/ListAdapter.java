@@ -89,18 +89,4 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         }
     }
 
-    /*private void setImage(String urlImage) {
-
-        ImageRequest imageRequest = new ImageRequest(urlImage, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                iconImage.setImageBitmap(response);
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context.getApplicationContext(),  "error al cargar la imagen", Toast.LENGTH_LONG).show();
-            }
-        });
-    }*/
 }

@@ -20,7 +20,7 @@ import com.example.rickandmortyapi.clases.ConexionSqliteHelper;
 import com.example.rickandmortyapi.clases.ListAdapter;
 import com.example.rickandmortyapi.clases.ListElement;
 import com.example.rickandmortyapi.clases.Origin;
-import com.example.rickandmortyapi.clases.Personaje;
+import com.example.rickandmortyapi.clases.CharacterC;
 import com.example.rickandmortyapi.clases.Utils;
 
 import org.json.JSONArray;
@@ -63,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
             default:
 
-                Intent intent2 = new Intent(MainActivity.this, InfoActivity.class);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent2.putExtras(bundInfo);
-                startActivity(intent2);
+                break;
         }
     }
 
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parserJson(JSONObject response) {
-        Personaje personaje;
+        CharacterC characterC;
         Origin origin;
         com.example.rickandmorty.Clases.Location location;
         JSONArray episodio;
@@ -99,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 location = new com.example.rickandmorty.Clases.Location(jsnPersonaje.getJSONObject("location").getString("name"),
                         jsnPersonaje.getJSONObject("origin").getString("url"));
                 episodio=jsnPersonaje.getJSONArray("episode");
-                personaje = new Personaje(jsnPersonaje.getInt("id"),
+                characterC = new CharacterC(jsnPersonaje.getInt("id"),
                         jsnPersonaje.getString("name"),
                         jsnPersonaje.getString("status"),
                         jsnPersonaje.getString("species"),
@@ -110,33 +107,15 @@ public class MainActivity extends AppCompatActivity {
                         episodio,
                         jsnPersonaje.getString("url"),
                         jsnPersonaje.getString("created"));
-                System.out.println(personaje.getName()+ personaje.getOrigin().getName()+ personaje.getLocation().getUrl());
 
-                ConexionSqliteHelper conn = new ConexionSqliteHelper(this, "db_Personajes", null, 1);
-                SQLiteDatabase db = conn.getWritableDatabase();
+               saveDB(jsnPersonaje);
 
-                ContentValues values = new ContentValues();
-                values.put(Utils.CAMPO_ID,jsnPersonaje.getInt("id"));
-                values.put(Utils.CAMPO_NAME,jsnPersonaje.getString("name"));
-                values.put(Utils.CAMPO_STATUS,jsnPersonaje.getString("status"));
-                values.put(Utils.CAMPO_SPECIES,jsnPersonaje.getString("species"));
-                values.put(Utils.CAMPO_TYPE,jsnPersonaje.getString("type"));
-                values.put(Utils.CAMPO_GENDER,jsnPersonaje.getString("gender"));
-                values.put(Utils.CAMPO_URL_IMAGE,jsnPersonaje.getString("image"));
-                values.put(Utils.CAMPO_URL_CHARACTER,jsnPersonaje.getString("url"));
-                values.put(Utils.CAMPO_CREATED,jsnPersonaje.getString("created"));
-
-                Long result = db.insert(Utils.TABLE_PERSONAJES, Utils.CAMPO_ID, values);
-
-                db.close();
-
-                name = personaje.getName();
-                species = personaje.getSpecies();
-                status = personaje.getStatus();
-                gender = personaje.getGender();
-                image = personaje.getUrlImage();
+                name = characterC.getName();
+                species = characterC.getSpecies();
+                status = characterC.getStatus();
+                gender = characterC.getGender();
+                image = characterC.getUrlImage();
                 elements.add(new ListElement(name, species, status, gender));
-                System.out.println("LISTA: "+elements.get(i).name+", "+elements.get(i).status);
 
             }
             ListAdapter listAdapter = new ListAdapter(elements, this);
@@ -151,13 +130,44 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     selection = elements.get(recyclerView.getChildAdapterPosition(view)).getName();
                     bundInfo.putString("name", selection);
-                    System.out.println("esta es la seleccion "+selection );
+
+                    Intent intent2 = new Intent(MainActivity.this, InfoActivity.class);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent2.putExtras(bundInfo);
+                    startActivity(intent2);
                 }
             });
 
         }catch (JSONException e){
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveDB(JSONObject jsnPersonaje) {
+
+        ConexionSqliteHelper conn = new ConexionSqliteHelper(this, "db_character", null, 1);
+        SQLiteDatabase db = conn.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        try {
+            values.put(Utils.FIELD_ID,jsnPersonaje.getInt("id"));
+            values.put(Utils.FIELD_NAME,jsnPersonaje.getString("name"));
+            values.put(Utils.FIELD_STATUS,jsnPersonaje.getString("status"));
+            values.put(Utils.FIELD_SPECIES,jsnPersonaje.getString("species"));
+            values.put(Utils.FIELD_TYPE,jsnPersonaje.getString("type"));
+            values.put(Utils.FIELD_GENDER,jsnPersonaje.getString("gender"));
+            values.put(Utils.FIELD_URL_IMAGE,jsnPersonaje.getString("image"));
+            values.put(Utils.FIELD_URL_CHARACTER,jsnPersonaje.getString("url"));
+            values.put(Utils.FIELD_CREATED,jsnPersonaje.getString("created"));
+            values.put(Utils.FIELD_FAVORITE, 0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        Long result = db.insert(Utils.TABLE_CHARACTER, Utils.FIELD_ID, values);
+
+        db.close();
     }
 
 }
